@@ -5,6 +5,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.model_selection import StratifiedShuffleSplit
+from pandas.plotting import scatter_matrix
 
 # ----------------------------------------
 # Configuration
@@ -92,8 +93,38 @@ if __name__ == "__main__":
     fetch_housing_data()
     housing = load_housing_data()
     train_set, test_set = stratified_split(housing)
+    housing = train_set.copy()
+    housing.plot(
+        kind="scatter",
+        x="longitude",
+        y="latitude",
+        alpha=0.4,
+        s=housing["population"] / 100,
+        label="population",
+        figsize=(10, 7),
+        c="median_house_value",
+        cmap=plt.get_cmap("jet"),
+        colorbar=True,
+    )
+    plt.legend()
+    plt.show()
+    corr_matrix = housing.select_dtypes(include=[np.number]).corr()
+    print(corr_matrix["median_house_value"].sort_values(ascending=False))
+    attributes = [
+        "median_house_value",
+        "median_income",
+        "total_rooms",
+        "housing_median_age",
+    ]
+    scatter_matrix(housing[attributes], figsize=(12, 8))
+    housing.plot(
+        kind="scatter",
+        x="median_income",
+        y="median_house_value",
+        alpha=0.1,
+    )
+    plt.show()
+    # print(f"\nTrain set size: {len(train_set)}")
+    # print(f"Test set size: {len(test_set)}")
 
-    print(f"\nTrain set size: {len(train_set)}")
-    print(f"Test set size: {len(test_set)}")
-
-    explore_data(train_set)
+    # explore_data(train_set)
