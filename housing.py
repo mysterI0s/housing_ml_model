@@ -127,4 +127,4 @@ if __name__ == "__main__":
     # print(f"\nTrain set size: {len(train_set)}")
     # print(f"Test set size: {len(test_set)}")
 
-    # explore_data(train_set)
+    explore_data(train_set)
